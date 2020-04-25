@@ -2,8 +2,8 @@ import React, { Component } from "react";
 
 import { Link as RouterLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import { fade, withStyles } from "@material-ui/core/styles";
-import { withCookies, Cookies } from "react-cookie";
+import { withStyles } from "@material-ui/core/styles";
+import { withCookies } from "react-cookie";
 
 import {
   AppBar,
@@ -15,7 +15,8 @@ import {
 } from "@material-ui/core";
 import {
   Menu as MenuIcon,
-  AccountCircle,
+  Event,
+  EventAvailable,
   FlightTakeoff,
   FlightLand,
 } from "@material-ui/icons";
@@ -45,20 +46,16 @@ class InviteAppBar extends Component {
 
   componentDidUpdate() {
     const auth = this.props.cookies.get("loginid");
-    if (auth != this.state.auth) {
+    if (auth !== this.state.auth) {
       this.setState({ auth: auth });
     }
   }
 
   render() {
     const { classes } = this.props;
-    const { auth } = this.props;
-
-    const handleChange = (event) => {};
-
     const handleLogout = (event) => {
       this.props.cookies.remove("loginid");
-      this.props.history.push('/');
+      this.props.history.push("/");
     };
 
     const handleMenu = (event) => {
@@ -73,13 +70,6 @@ class InviteAppBar extends Component {
       <div className={classes.root}>
         <AppBar position="fixed">
           <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
             <Typography variant="h6" className={classes.title}>
               invite.so
             </Typography>
@@ -92,31 +82,16 @@ class InviteAppBar extends Component {
             )}
             {this.state.auth && (
               <div>
-                <IconButton onClick={handleMenu} color="inherit">
-                  <AccountCircle />
-                  <Typography value={this.props.cookies.get("loginid")}></Typography>
+                <IconButton color="inherit" component={RouterLink} to="/reserve">
+                  <Event />
+                </IconButton>
+                <IconButton color="inherit" component={RouterLink} to="/check">
+                  <EventAvailable />
                 </IconButton>
                 <IconButton color="inherit" onClick={handleLogout}>
                   <FlightTakeoff />
                 </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={this.state.anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={this.state.anchorEl !== null}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                </Menu>
+                
               </div>
             )}
           </Toolbar>
