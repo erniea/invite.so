@@ -34,20 +34,32 @@ const useStyles = (theme) => ({
 });
 
 class InviteAppBar extends Component {
-  constructor() {
-    super();
-    this.state = { anchorEl: null, auth: false };
+  constructor(props) {
+    super(props);
+    const { cookies } = props;
+
+    this.state = { anchorEl: null, auth: cookies.get("loginid") };
   }
 
-  componentDidMount() {
-    this.setState({ auth: this.props.cookies.get("loginid") });
+  componentDidMount() {}
+
+  componentDidUpdate() {
+    const auth = this.props.cookies.get("loginid");
+    if (auth != this.state.auth) {
+      this.setState({ auth: auth });
+    }
   }
-  
+
   render() {
     const { classes } = this.props;
     const { auth } = this.props;
 
     const handleChange = (event) => {};
+
+    const handleLogout = (event) => {
+      this.props.cookies.remove("loginid");
+      this.props.history.push('/');
+    };
 
     const handleMenu = (event) => {
       this.setState({ anchorEl: event.currentTarget });
@@ -82,8 +94,9 @@ class InviteAppBar extends Component {
               <div>
                 <IconButton onClick={handleMenu} color="inherit">
                   <AccountCircle />
+                  <Typography value={this.props.cookies.get("loginid")}></Typography>
                 </IconButton>
-                <IconButton color="inherit">
+                <IconButton color="inherit" onClick={handleLogout}>
                   <FlightTakeoff />
                 </IconButton>
                 <Menu
