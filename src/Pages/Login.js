@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import { withCookies } from "react-cookie";
 
-import { Button } from "@material-ui/core";
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +11,7 @@ class Login extends Component {
     const { cookies } = props;
 
     this.state = {
-      auth: cookies.get("loginid"),
+      auth: cookies.get("auth"),
     };
   }
 
@@ -21,7 +20,7 @@ class Login extends Component {
   render() {
     const handleLoginSucceed = (e) => {
       const { cookies } = this.props;
-      cookies.set("loginid", true);
+      cookies.set("auth", true);
       cookies.set("profile", e.profileObj);
       this.setState({ auth: true });
       this.props.history.push("/");

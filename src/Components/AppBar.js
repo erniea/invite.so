@@ -10,11 +10,8 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  MenuItem,
-  Menu,
 } from "@material-ui/core";
 import {
-  Menu as MenuIcon,
   Event,
   EventAvailable,
   FlightTakeoff,
@@ -39,13 +36,13 @@ class InviteAppBar extends Component {
     super(props);
     const { cookies } = props;
 
-    this.state = { anchorEl: null, auth: cookies.get("loginid") };
+    this.state = { auth: cookies.get("auth") };
   }
 
   componentDidMount() {}
 
   componentDidUpdate() {
-    const auth = this.props.cookies.get("loginid");
+    const auth = this.props.cookies.get("auth");
     if (auth !== this.state.auth) {
       this.setState({ auth: auth });
     }
@@ -54,16 +51,8 @@ class InviteAppBar extends Component {
   render() {
     const { classes } = this.props;
     const handleLogout = (event) => {
-      this.props.cookies.remove("loginid");
+      this.props.cookies.remove("auth");
       this.props.history.push("/");
-    };
-
-    const handleMenu = (event) => {
-      this.setState({ anchorEl: event.currentTarget });
-    };
-
-    const handleClose = () => {
-      this.setState({ anchorEl: null });
     };
 
     return (

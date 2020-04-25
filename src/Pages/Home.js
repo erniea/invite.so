@@ -24,19 +24,19 @@ class Home extends Component {
     const { cookies } = this.props;
     const { classes } = this.props;
 
-    const auth = cookies.get("loginid");
+    const auth = cookies.get("auth");
     const profile = cookies.get("profile");
 
-    const rand = Math.random() * 5;
+    const rand = Math.floor( Math.random() * 5);
 
     const arr = ["Windy", "Rocky", "Tangerine", "Harbang", "Hallabong"];
-
+    console.log(rand);
 
     return (
       <div>
-        <h1>{`.. So, I want to invite you to ${arr[rand]} Island ..`}</h1>
+        {!auth && <h1>.. Welcome Home ..</h1>}
         {auth && (<div>
-          <h2>Welcome Home</h2>
+          <h1>{`.. So, I want to invite you to ${arr[rand]} Island ..`}</h1>
           <Card className={classes.card}>
             <CardActionArea>
               <CardMedia className={classes.media} image={profile.imageUrl} />
