@@ -51,6 +51,19 @@ class Check extends Component {
     const { classes } = this.props;
     const { cookies } = this.props;
 
+    const toDateStr = (inDate) => {
+      let date = new Date(inDate);
+      let year = date.getFullYear(); //yyyy
+      let month = 1 + date.getMonth(); //M
+      month = month >= 10 ? month : "0" + month; //month 두자리로 저장
+      let day = date.getDate(); //d
+      day = day >= 10 ? day : "0" + day; //day 두자리로 저장
+      let hour = date.getHours();
+      hour = hour >= 10 ? hour : "0" + hour;
+
+      return year + "-" + month + "-" + day + " " + hour + ":00";
+    };
+
     return (
       <div>
         <Typography>Reservation for {cookies.get("profile").name}</Typography>
@@ -59,15 +72,12 @@ class Check extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className={classes.head}>reservation no.</TableCell>
+                <TableCell className={classes.head}>res. no.</TableCell>
                 <TableCell className={classes.head} align="right">
                   from date
                 </TableCell>
                 <TableCell className={classes.head} align="right">
                   to date
-                </TableCell>
-                <TableCell className={classes.head} align="right">
-                  member sn
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -77,9 +87,9 @@ class Check extends Component {
                   <TableCell component="th" scope="row">
                     {row.sn}
                   </TableCell>
-                  <TableCell align="right">{row.fromDate}</TableCell>
-                  <TableCell align="right">{row.toDate}</TableCell>
-                  <TableCell align="right">{row.memberSn}</TableCell>
+                  <TableCell align="right">{toDateStr(row.fromDate)}</TableCell>
+                  <TableCell align="right">{toDateStr(row.toDate)}</TableCell>
+                  {console.log(row.toDate)}
                 </TableRow>
               ))}
             </TableBody>
