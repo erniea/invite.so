@@ -5,7 +5,13 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { withCookies } from "react-cookie";
 
-import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Box,
+} from "@material-ui/core";
 import {
   Event,
   EventAvailable,
@@ -39,15 +45,19 @@ class InviteAppBar extends Component {
   componentDidUpdate() {
     const { cookies } = this.props;
     if (cookies.get("sn") !== this.state.sn) {
-
-      this.setState({sn: cookies.get("sn")});
+      this.setState({ sn: cookies.get("sn") });
     }
   }
 
   render() {
     const { classes } = this.props;
+
+    const { cookies } = this.props;
+
+    const auth = this.state.sn !== undefined;
+
     const handleLogout = (event) => {
-      this.props.cookies.remove("sn");
+      cookies.remove("sn");
       this.props.history.push("/");
     };
 
@@ -58,14 +68,16 @@ class InviteAppBar extends Component {
             <Typography variant="h6" className={classes.title}>
               invite.so
             </Typography>
-            {this.state.sn === undefined && (
+            {auth && <Typography>{cookies.get("profile").name}</Typography>}
+
+            {!auth && (
               <div>
                 <IconButton color="inherit" component={RouterLink} to="/login">
                   <FlightLand />
                 </IconButton>
               </div>
             )}
-            {this.state.sn !== undefined && (
+            {auth && (
               <div>
                 <IconButton
                   color="inherit"
