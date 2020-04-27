@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withCookies } from "react-cookie";
 
 import {
   Table,
@@ -9,9 +11,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Box,
+  Button,
+  Typography,
 } from "@material-ui/core";
-import { blue } from "@material-ui/core/colors";
+
+import axios from "axios";
 
 const useStyles = (theme) => ({
   head: {
@@ -19,60 +23,72 @@ const useStyles = (theme) => ({
   },
 });
 class Check extends Component {
+  constructor({ props }) {
+    super(props);
+
+    this.state = { reservation: [] };
+  }
+
+  componentDidMount() {
+    const { cookies } = this.props;
+
+    let formdata = new FormData();
+    formdata.append("memberSn", cookies.get("sn"));
+    axios
+      .post("https://api.invite.so/reservation/my/", formdata)
+      .then((res) => {
+        console.log("succ");
+        console.log(res);
+        this.setState({ reservation: res.data });
+      })
+      .catch((res) => {
+        console.log("err");
+        console.log(res);
+      });
+  }
+
   render() {
     const { classes } = this.props;
-
-    function createData(name, calories, fat, carbs, protein) {
-      return { name, calories, fat, carbs, protein };
-    }
-
-    const rows = [
-      createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-      createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-      createData("Eclair", 262, 16.0, 24, 6.0),
-      createData("Cupcake", 305, 3.7, 67, 4.3),
-      createData("Gingerbread", 356, 16.0, 49, 3.9),
-    ];
+    const { cookies } = this.props;
 
     return (
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.head}>
-                Dessert (100g serving)
-              </TableCell>
-              <TableCell className={classes.head} align="right">
-                Calories
-              </TableCell>
-              <TableCell className={classes.head} align="right">
-                Fat&nbsp;(g)
-              </TableCell>
-              <TableCell className={classes.head} align="right">
-                Carbs&nbsp;(g)
-              </TableCell>
-              <TableCell className={classes.head} align="right">
-                Protein&nbsp;(g)
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name} hover={true}>
-                <TableCell component="th" scope="row">
-                  {row.name}
+      <div>
+        <Typography>Reservation for {cookies.get("profile").name}</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.head}>reservation no.</TableCell>
+                <TableCell className={classes.head} align="right">
+                  from date
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell className={classes.head} align="right">
+                  to date
+                </TableCell>
+                <TableCell className={classes.head} align="right">
+                  member sn
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {this.state.reservation.map((row) => (
+                <TableRow key={row.sn} hover={true}>
+                  <TableCell component="th" scope="row">
+                    {row.sn}
+                  </TableCell>
+                  <TableCell align="right">{row.fromDate}</TableCell>
+                  <TableCell align="right">{row.toDate}</TableCell>
+                  <TableCell align="right">{row.memberSn}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     );
   }
 }
-
-export default withStyles(useStyles)(Check);
+Check.propTypes = {
+  cookies: PropTypes.object.isRequired,
+};
+export default withCookies(withStyles(useStyles)(Check));
