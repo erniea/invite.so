@@ -5,7 +5,7 @@ import "./App.css";
 import { Route } from "react-router-dom";
 import { Box, Container } from "@material-ui/core";
 
-import { Home, Login, Check, Reserve } from "./Pages";
+import { Home, Login, Check, Reservation } from "./Pages";
 import InviteAppBar from "./Components/AppBar";
 import Copyright from "./Components/Copyright";
 
@@ -18,7 +18,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/check" component={Check} />
-        <Route path="/reserve" component={Reserve} />
+        <Route path="/reservation" component={Reservation} />
       </Container>
       <Box m={4} />
       <Copyright />

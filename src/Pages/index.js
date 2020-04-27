@@ -1,4 +1,4 @@
 export { default as Login } from "./Login";
 export { default as Home } from "./Home";
 export { default as Check } from "./Check";
-export { default as Reserve } from "./Reserve";
+export { default as Reservation } from "./Reservation";

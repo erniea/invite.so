@@ -70,7 +70,7 @@ class InviteAppBar extends Component {
                 <IconButton
                   color="inherit"
                   component={RouterLink}
-                  to="/reserve"
+                  to="/reservation"
                 >
                   <Event />
                 </IconButton>
