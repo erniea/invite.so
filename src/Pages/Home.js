@@ -39,7 +39,7 @@ class Home extends Component {
       justify="center"
       alignItems="center">
         <Grid item>
-          <h1>{`.. So, I want to invite you to ${arr[rand]} Island ..`}</h1>
+          <Typography variant="h4">{`.. So, I want to invite you to ${arr[rand]} Island ..`}</Typography>
         </Grid>
         <Grid item>
           <Card className={classes.card}>
@@ -61,7 +61,7 @@ class Home extends Component {
 
     return (
       <div>
-        {!auth && <h1>.. Welcome Home ..</h1>}
+        {!auth && <Typography variant="h4">.. Welcome Home ..</Typography>}
         {auth && login}
       </div>
     );
