@@ -6,13 +6,16 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  Button,
+  Dialog,
+  Grid
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { withCookies } from "react-cookie";
 
 const useStyles = (theme) => ({
   card: {
-    maxWidth: 256,
+    width: 256,
   },
   media: {
     height: 256,
@@ -24,19 +27,21 @@ class Home extends Component {
     const { cookies } = this.props;
     const { classes } = this.props;
 
-    const auth = cookies.get("auth");
+    const auth = cookies.get("sn") !== undefined;
     const profile = cookies.get("profile");
-
-    const rand = Math.floor( Math.random() * 5);
-
+    const idtoken = cookies.get("idtoken");
+    console.log(profile);
+    const rand = Math.floor(Math.random() * 5);
     const arr = ["Windy", "Rocky", "Tangerine", "Harbang", "Hallabong"];
-    console.log(rand);
 
-    return (
-      <div>
-        {!auth && <h1>.. Welcome Home ..</h1>}
-        {auth && (<div>
+    const login = auth && (
+      <Grid container direction="column"
+      justify="center"
+      alignItems="center">
+        <Grid item>
           <h1>{`.. So, I want to invite you to ${arr[rand]} Island ..`}</h1>
+        </Grid>
+        <Grid item>
           <Card className={classes.card}>
             <CardActionArea>
               <CardMedia className={classes.media} image={profile.imageUrl} />
@@ -50,8 +55,14 @@ class Home extends Component {
               </CardContent>
             </CardActionArea>
           </Card>
-          </div>
-        )}
+        </Grid>
+      </Grid>
+    );
+
+    return (
+      <div>
+        {!auth && <h1>.. Welcome Home ..</h1>}
+        {auth && login}
       </div>
     );
   }

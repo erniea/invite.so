@@ -5,12 +5,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { withCookies } from "react-cookie";
 
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
 import {
   Event,
   EventAvailable,
@@ -36,22 +31,23 @@ class InviteAppBar extends Component {
     super(props);
     const { cookies } = props;
 
-    this.state = { auth: cookies.get("auth") };
+    this.state = { sn: cookies.get("sn") };
   }
 
   componentDidMount() {}
 
   componentDidUpdate() {
-    const auth = this.props.cookies.get("auth");
-    if (auth !== this.state.auth) {
-      this.setState({ auth: auth });
+    const { cookies } = this.props;
+    if (cookies.get("sn") !== this.state.sn) {
+
+      this.setState({sn: cookies.get("sn")});
     }
   }
 
   render() {
     const { classes } = this.props;
     const handleLogout = (event) => {
-      this.props.cookies.remove("auth");
+      this.props.cookies.remove("sn");
       this.props.history.push("/");
     };
 
@@ -62,16 +58,20 @@ class InviteAppBar extends Component {
             <Typography variant="h6" className={classes.title}>
               invite.so
             </Typography>
-            {!this.state.auth && (
+            {this.state.sn === undefined && (
               <div>
                 <IconButton color="inherit" component={RouterLink} to="/login">
                   <FlightLand />
                 </IconButton>
               </div>
             )}
-            {this.state.auth && (
+            {this.state.sn !== undefined && (
               <div>
-                <IconButton color="inherit" component={RouterLink} to="/reserve">
+                <IconButton
+                  color="inherit"
+                  component={RouterLink}
+                  to="/reserve"
+                >
                   <Event />
                 </IconButton>
                 <IconButton color="inherit" component={RouterLink} to="/check">
@@ -80,7 +80,6 @@ class InviteAppBar extends Component {
                 <IconButton color="inherit" onClick={handleLogout}>
                   <FlightTakeoff />
                 </IconButton>
-                
               </div>
             )}
           </Toolbar>
