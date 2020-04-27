@@ -54,15 +54,7 @@ class Check extends Component {
     return (
       <div>
         <Typography>Reservation for {cookies.get("profile").name}</Typography>
-        {this.state.reservation.map((row) => (
-            <div>
-                  <Typography>
-                    {row.sn}
-                  </Typography>
-                  <Typography>{row.fromDate}</Typography>
-                  <Typography>{row.toDate}</Typography>
-                  <Typography>{row.memberSn}</Typography>
-              </div>))}
+
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -90,14 +82,6 @@ class Check extends Component {
                   <TableCell align="right">{row.memberSn}</TableCell>
                 </TableRow>
               ))}
-                <TableRow key={99} hover={true}>
-                   <TableCell component="th" scope="row">
-                    place
-                  </TableCell>
-                  <TableCell align="right">holder</TableCell>
-                  <TableCell align="right">holder</TableCell>
-                  <TableCell align="right">holder</TableCell>
-                </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
