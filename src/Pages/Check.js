@@ -81,6 +81,14 @@ class Check extends Component {
                   <TableCell align="right">{row.memberSn}</TableCell>
                 </TableRow>
               ))}
+                <TableRow key={99} hover={true}>
+                   <TableCell component="th" scope="row">
+                    place
+                  </TableCell>
+                  <TableCell align="right">holder</TableCell>
+                  <TableCell align="right">holder</TableCell>
+                  <TableCell align="right">holder</TableCell>
+                </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
