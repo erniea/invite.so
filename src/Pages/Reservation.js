@@ -1,10 +1,24 @@
 import React, { Component } from "react";
-import { Typography, Box, Grid, TextField, Button, Hidden } from "@material-ui/core";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+
+import {
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  Hidden,
+} from "@material-ui/core";
 import {
   StaticDateRangePicker,
   LocalizationProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns";
+
+const useStyles = (theme) => ({
+  
+});
 
 class Reservation extends Component {
   constructor() {
@@ -12,6 +26,8 @@ class Reservation extends Component {
     this.state = { range: [] };
   }
   render() {
+    const { classes } = this.props;
+
     const handleDateChange = (date) => {
       console.log(date);
       this.setState({ range: date });
@@ -20,16 +36,19 @@ class Reservation extends Component {
     return (
       <div>
         <Typography variant="h4">Reservation</Typography>
-        <Grid container direction="column">
+        <Grid container direction="column"   alignItems="center">
+          <Grid item>
+            <Box p={5} bgcolor="secondary.main" />
+          </Grid>
           <Grid item>
             <LocalizationProvider dateAdapter={DateFnsUtils}>
               <Hidden mdDown>
-                <StaticDateRangePicker
-                  displayStaticWrapperAs="desktop"
-                  value={this.state.range}
-                  onChange={(date) => handleDateChange(date)}
-                  renderInput={(props) => <TextField {...props} />}
-                />
+                  <StaticDateRangePicker
+                    displayStaticWrapperAs="desktop"
+                    value={this.state.range}
+                    onChange={(date) => handleDateChange(date)}
+                    renderInput={(props) => <TextField {...props} />}
+                  />
               </Hidden>
               <Hidden mdUp>
                 <StaticDateRangePicker
@@ -57,8 +76,9 @@ class Reservation extends Component {
     );
   }
 }
-/*
 
+Reservation.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-          */
-export default Reservation;
+export default withStyles(useStyles)(Reservation);

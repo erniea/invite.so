@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { withCookies } from "react-cookie";
+
 
 import {
   Table,
@@ -101,5 +102,7 @@ class Check extends Component {
 }
 Check.propTypes = {
   cookies: PropTypes.object.isRequired,
+
 };
+
 export default withCookies(withStyles(useStyles)(Check));
