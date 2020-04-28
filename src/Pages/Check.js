@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+
 import { withStyles } from "@material-ui/core/styles";
 import { withCookies } from "react-cookie";
-
 
 import {
   Table,
@@ -12,11 +12,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
+  IconButton,
   Typography,
 } from "@material-ui/core";
 
 import axios from "axios";
+import { DeleteForever } from "@material-ui/icons";
+import { toDateStr, toTimeStr } from "./Utils";
 
 const useStyles = (theme) => ({
   head: {
@@ -49,20 +51,26 @@ class Check extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const { cookies } = this.props;
+    const { classes, cookies } = this.props;
 
-    const toDateStr = (inDate) => {
-      let date = new Date(inDate);
-      let year = date.getFullYear(); //yyyy
-      let month = 1 + date.getMonth(); //M
-      month = month >= 10 ? month : "0" + month; //month 두자리로 저장
-      let day = date.getDate(); //d
-      day = day >= 10 ? day : "0" + day; //day 두자리로 저장
-      let hour = date.getHours();
-      hour = hour >= 10 ? hour : "0" + hour;
+    const handleDelete = (e) => {
+      const sn = e.currentTarget.getAttribute("sn");
 
-      return year + "-" + month + "-" + day + " " + hour + ":00";
+      axios
+        .delete(`https://api.invite.so/reservation/${sn}/`)
+        .then((res) => {
+          console.log("succ");
+          console.log(res);
+          let newres = this.state.reservation.filter(
+            (item) => item.sn !== parseInt(sn)
+          );
+          console.log(newres);
+          this.setState({ reservation: newres });
+        })
+        .catch((res) => {
+          console.log("err");
+          console.log(res);
+        });
     };
 
     return (
@@ -80,19 +88,36 @@ class Check extends Component {
                 <TableCell className={classes.head} align="right">
                   to date
                 </TableCell>
+                <TableCell className={classes.head} align="right">
+                  cancel
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.reservation.map((row) => (
-                <TableRow key={row.sn} hover={true}>
-                  <TableCell component="th" scope="row">
-                    {row.sn}
+              {this.state.reservation.length > 0 &&
+                this.state.reservation.map((row) => (
+                  <TableRow key={row.sn} hover={true}>
+                    <TableCell component="th" scope="row">
+                      {row.sn}
+                    </TableCell>
+                    <TableCell align="right">
+                      {toDateStr(new Date(row.fromDate))}
+                    </TableCell>
+                    <TableCell align="right">{toDateStr(new Date(row.toDate))}</TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={handleDelete} sn={row.sn}>
+                        <DeleteForever />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              {this.state.reservation.length === 0 && (
+                <TableRow key="default" hover={true}>
+                  <TableCell component="th" colSpan="4" align="center">
+                    <Typography>no reservation</Typography>
                   </TableCell>
-                  <TableCell align="right">{toDateStr(row.fromDate)}</TableCell>
-                  <TableCell align="right">{toDateStr(row.toDate)}</TableCell>
-                  {console.log(row.toDate)}
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -101,8 +126,8 @@ class Check extends Component {
   }
 }
 Check.propTypes = {
+  classes: PropTypes.object.isRequired,
   cookies: PropTypes.object.isRequired,
-
 };
 
 export default withCookies(withStyles(useStyles)(Check));
