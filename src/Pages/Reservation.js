@@ -56,7 +56,7 @@ class Reservation extends Component {
       this.state.range[0].setMinutes(this.state.time.getMinutes());
       this.setState({ sending: true });
       let formdata = new FormData();
-      formdata.append("memberSn", cookies.get("sn"));
+      formdata.append("token", cookies.get("token"));
       formdata.append("fromDate", toReqStr(this.state.range[0]));
       formdata.append("toDate", toReqStr(this.state.range[1]));
       axios

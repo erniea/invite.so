@@ -19,10 +19,11 @@ class Login extends Component {
   }
 
   render() {
-    const setAuthAndRedirect = (sn) => {
+    const setAuthAndRedirect = (data) => {
       const { cookies } = this.props;
 
-      cookies.set("sn", sn);
+      cookies.set("sn", data.sn);
+      cookies.set("token", data.token)
       this.props.history.push("/");
     }
     const requestRegister = () => {
@@ -31,22 +32,21 @@ class Login extends Component {
       let formdata = new FormData();
       formdata.append("googleId", cookies.get("profile").googleId);
       formdata.append("email", cookies.get("profile").email);
-      formdata.append("token", cookies.get("token"));
+      formdata.append("token", cookies.get("googletoken"));
 
       axios.post("https://invite.so/req/register/", formdata).then((res) => {
-        setAuthAndRedirect(res.data.sn)   ;
+        setAuthAndRedirect(res.data)   ;
       });
     };
     const requestSn = () => {
       let formdata = new FormData();
       const { cookies } = this.props;
       formdata.append("googleId", cookies.get("profile").googleId);
-      formdata.append("token", cookies.get("token"));
-      console.log(cookies.get("token"));
+      formdata.append("token", cookies.get("googletoken"));
       axios
         .post("https://invite.so/req/getsn/", formdata)
         .then((res) => {
-          setAuthAndRedirect(res.data.sn);
+          setAuthAndRedirect(res.data);
         })
         .catch((res) => {
           console.log(res);
@@ -57,7 +57,7 @@ class Login extends Component {
     const handleLoginSucceed = (e) => {
       const { cookies } = this.props;
       cookies.set("profile", e.profileObj);
-      cookies.set("token", e.accessToken);
+      cookies.set("googletoken", e.accessToken);
       this.setState({ auth: true });
       requestSn();
     };
