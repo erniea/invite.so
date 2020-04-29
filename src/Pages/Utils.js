@@ -16,3 +16,13 @@ export function toTimeStr(inTime) {
 export function toReqStr(inDate) {
   return toDateStr(inDate) + "T" + toTimeStr(inDate);
 }
+export function toStateStr(inState) {
+  switch (inState) {
+    case 0:
+      return "Request";
+    case 1:
+      return "Canceled";
+    case 2:
+      return "Confirmed";
+  }
+}

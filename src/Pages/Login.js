@@ -31,7 +31,7 @@ class Login extends Component {
       let formdata = new FormData();
       formdata.append("googleId", cookies.get("profile").googleId);
       formdata.append("email", cookies.get("profile").email);
-      formdata.append("token", cookies.get("idtoken"));
+      formdata.append("token", cookies.get("token"));
 
       axios.post("https://invite.so/req/register/", formdata).then((res) => {
         setAuthAndRedirect(res.data.sn)   ;
@@ -41,6 +41,8 @@ class Login extends Component {
       let formdata = new FormData();
       const { cookies } = this.props;
       formdata.append("googleId", cookies.get("profile").googleId);
+      formdata.append("token", cookies.get("token"));
+      console.log(cookies.get("token"));
       axios
         .post("https://invite.so/req/getsn/", formdata)
         .then((res) => {
@@ -55,7 +57,7 @@ class Login extends Component {
     const handleLoginSucceed = (e) => {
       const { cookies } = this.props;
       cookies.set("profile", e.profileObj);
-      cookies.set("idtoken", e.accessToken);
+      cookies.set("token", e.accessToken);
       this.setState({ auth: true });
       requestSn();
     };

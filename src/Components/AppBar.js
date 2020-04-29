@@ -17,6 +17,7 @@ import {
   EventAvailable,
   FlightTakeoff,
   FlightLand,
+  DateRange,
 } from "@material-ui/icons";
 
 const useStyles = (theme) => ({
@@ -79,6 +80,9 @@ class InviteAppBar extends Component {
             )}
             {auth && (
               <div>
+{/*                <IconButton color="inherit" component={RouterLink} to="/calendar">
+                  <DateRange /> 
+            </IconButton> */}
                 <IconButton
                   color="inherit"
                   component={RouterLink}

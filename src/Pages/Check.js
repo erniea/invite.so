@@ -18,7 +18,7 @@ import {
 
 import axios from "axios";
 import { DeleteForever } from "@material-ui/icons";
-import { toDateStr, toTimeStr } from "./Utils";
+import { toDateStr, toStateStr } from "./Utils";
 
 const useStyles = (theme) => ({
   head: {
@@ -36,7 +36,7 @@ class Check extends Component {
     const { cookies } = this.props;
 
     let formdata = new FormData();
-    formdata.append("memberSn", cookies.get("sn"));
+    formdata.append("token", cookies.get("token"));
     axios
       .post("https://api.invite.so/reservation/my/", formdata)
       .then((res) => {
@@ -56,19 +56,15 @@ class Check extends Component {
     const handleDelete = (e) => {
       const sn = e.currentTarget.getAttribute("sn");
 
+      let formdata = new FormData();
+      formdata.append("token", cookies.get("token"));
+      
       axios
-        .delete(`https://api.invite.so/reservation/${sn}/`)
+        .post(`https://api.invite.so/reservation/${sn}/cancel/`, formdata)
         .then((res) => {
-          console.log("succ");
-          console.log(res);
-          let newres = this.state.reservation.filter(
-            (item) => item.sn !== parseInt(sn)
-          );
-          console.log(newres);
-          this.setState({ reservation: newres });
+          this.setState({ reservation: res.data });
         })
         .catch((res) => {
-          console.log("err");
           console.log(res);
         });
     };
@@ -89,6 +85,9 @@ class Check extends Component {
                   to date
                 </TableCell>
                 <TableCell className={classes.head} align="right">
+                  state
+                </TableCell>
+                <TableCell className={classes.head} align="right">
                   cancel
                 </TableCell>
               </TableRow>
@@ -104,6 +103,7 @@ class Check extends Component {
                       {toDateStr(new Date(row.fromDate))}
                     </TableCell>
                     <TableCell align="right">{toDateStr(new Date(row.toDate))}</TableCell>
+                    <TableCell align="right">{toStateStr(row.state)}</TableCell>
                     <TableCell align="right">
                       <IconButton onClick={handleDelete} sn={row.sn}>
                         <DeleteForever />
@@ -113,7 +113,7 @@ class Check extends Component {
                 ))}
               {this.state.reservation.length === 0 && (
                 <TableRow key="default" hover={true}>
-                  <TableCell component="th" colSpan="4" align="center">
+                  <TableCell component="th" colSpan="5" align="center">
                     <Typography>no reservation</Typography>
                   </TableCell>
                 </TableRow>

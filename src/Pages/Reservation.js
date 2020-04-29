@@ -3,22 +3,43 @@ import PropTypes from "prop-types";
 import { withCookies } from "react-cookie";
 import { withRouter } from "react-router-dom";
 
-import { Typography, Grid, TextField, Button, Hidden } from "@material-ui/core";
+import {
+  Typography,
+  Grid,
+  TextField,
+  Button,
+  Hidden,
+  CircularProgress,
+  Box,
+} from "@material-ui/core";
 import {
   StaticDateRangePicker,
   LocalizationProvider,
   TimePicker,
 } from "@material-ui/pickers";
-import {toDateStr, toTimeStr, toReqStr} from "./Utils";
+import { toDateStr, toTimeStr, toReqStr } from "./Utils";
 
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns";
 import axios from "axios";
+import { Send } from "@material-ui/icons";
 
 class Reservation extends Component {
-  constructor({props}) {
+  constructor({ props }) {
     super(props);
-    this.state = { range: [], time: new Date() };
+    this.state = {
+      range: [],
+      time: new Date(),
+      sending: false,
+      reserved: (e) => {
+        return false;
+      },
+    };
   }
+
+  componentDidMount() {
+    
+  }
+
   render() {
     const { cookies, history } = this.props;
 
@@ -27,13 +48,13 @@ class Reservation extends Component {
     };
 
     const handleTimeChange = (time) => {
-      this.setState( {time : time});
+      this.setState({ time: time });
     };
-  
+
     const handleRequest = (e) => {
       this.state.range[0].setHours(this.state.time.getHours());
       this.state.range[0].setMinutes(this.state.time.getMinutes());
-
+      this.setState({ sending: true });
       let formdata = new FormData();
       formdata.append("memberSn", cookies.get("sn"));
       formdata.append("fromDate", toReqStr(this.state.range[0]));
@@ -51,6 +72,7 @@ class Reservation extends Component {
           console.log(res);
         });
     };
+
     return (
       <div>
         <Typography variant="h4">Reservation</Typography>
@@ -60,40 +82,47 @@ class Reservation extends Component {
               <Hidden mdDown>
                 <StaticDateRangePicker
                   displayStaticWrapperAs="desktop"
+                  disablePast="true"
                   value={this.state.range}
                   onChange={(date) => handleDateChange(date)}
                   renderInput={(props) => <TextField {...props} />}
+                  shouldDisableDate={this.state.reserved}
                 />
               </Hidden>
               <Hidden mdUp>
                 <StaticDateRangePicker
                   displayStaticWrapperAs="mobile"
+                  disablePast="true"
                   value={this.state.range}
                   onChange={(date) => handleDateChange(date)}
+                  autoOk="true"
                   renderInput={(props) => <TextField {...props} />}
+                  shouldDisableDate={this.state.reserved}
                 />
               </Hidden>
             </Grid>
             <Grid item>
               <TimePicker
-                ampm={false}
+                ampm="false"
                 value={this.state.time}
                 onChange={handleTimeChange}
+                autoOk="true"
               />
             </Grid>
             <Grid item>
-              <Typography>
-                CheckIn {this.state.range[0] && toDateStr(this.state.range[0])}
-              </Typography>
-              <Typography>
-                CheckOut {this.state.range[1] && toDateStr(this.state.range[1])}
-              </Typography>
-              <Typography>
-                Arrival {this.state.time && toTimeStr(this.state.time)}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Button onClick={handleRequest}>Request</Button>
+              <Box p={2}>
+                {!this.state.sending && (
+                  <Button
+                    onClick={handleRequest}
+                    endIcon={<Send />}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Request
+                  </Button>
+                )}
+                {this.state.sending && <CircularProgress />}
+              </Box>
             </Grid>
           </Grid>
         </LocalizationProvider>
