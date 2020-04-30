@@ -64,13 +64,11 @@ class Reservation extends Component {
       axios
         .post("https://api.invite.so/reservation/", formdata)
         .then((res) => {
-          console.log("succ");
           console.log(res);
           this.setState({ reservation: res.data });
           history.push("/check");
         })
         .catch((res) => {
-          console.log("err");
           console.log(res);
         });
     };
@@ -90,7 +88,6 @@ class Reservation extends Component {
         return false;
       }
       for (let i = new Date(this.state.range[0]); i < this.state.range[1]; i.setDate(i.getDate() + 1)) {
-        console.log(i);
         if ( canNotReserve(i) ) {
           return false;
         }

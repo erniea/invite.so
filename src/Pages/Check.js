@@ -41,12 +41,10 @@ class Check extends Component {
     axios
       .post("https://api.invite.so/reservation/my/", formdata)
       .then((res) => {
-        console.log("succ");
         console.log(res);
         this.setState({ reservation: res.data });
       })
       .catch((res) => {
-        console.log("err");
         console.log(res);
       });
   }

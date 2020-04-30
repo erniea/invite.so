@@ -28,7 +28,6 @@ class Login extends Component {
     }
     const requestRegister = () => {
       const { cookies } = this.props;
-      console.log("Req");
       let formdata = new FormData();
       formdata.append("googleId", cookies.get("profile").googleId);
       formdata.append("email", cookies.get("profile").email);
@@ -49,7 +48,6 @@ class Login extends Component {
           setAuthAndRedirect(res.data);
         })
         .catch((res) => {
-          console.log(res);
           requestRegister();
         });
     };
