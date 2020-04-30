@@ -126,7 +126,7 @@ class Check extends Component {
                 ))}
               {this.state.reservation.length === 0 && (
                 <TableRow key="default" hover={true}>
-                  <TableCell component="th" colSpan="5" align="center">
+                  <TableCell component="th" colSpan="6" align="center">
                     <Typography>no reservation</Typography>
                   </TableCell>
                 </TableRow>
