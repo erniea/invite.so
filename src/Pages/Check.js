@@ -18,7 +18,7 @@ import {
 
 import axios from "axios";
 import { DeleteForever } from "@material-ui/icons";
-import { toDateStr, toStateStr } from "./Utils";
+import { toDateStr, toTimeStr, toStateStr } from "./Utils";
 
 const useStyles = (theme) => ({
   head: {
@@ -82,13 +82,16 @@ class Check extends Component {
                   from date
                 </TableCell>
                 <TableCell className={classes.head} align="right">
+                  arrival
+                </TableCell>
+                <TableCell className={classes.head} align="right">
                   to date
                 </TableCell>
                 <TableCell className={classes.head} align="right">
                   state
                 </TableCell>
                 <TableCell className={classes.head} align="right">
-                  cancel
+                  action
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -102,12 +105,16 @@ class Check extends Component {
                     <TableCell align="right">
                       {toDateStr(new Date(row.fromDate))}
                     </TableCell>
+                    <TableCell align="right">
+                      {toTimeStr(new Date(row.fromDate))}
+                    </TableCell>
                     <TableCell align="right">{toDateStr(new Date(row.toDate))}</TableCell>
                     <TableCell align="right">{toStateStr(row.state)}</TableCell>
                     <TableCell align="right">
+                      { row.state === 0 &&
                       <IconButton onClick={handleDelete} sn={row.sn}>
                         <DeleteForever />
-                      </IconButton>
+                      </IconButton>}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export function toDateStr(inDate) {
   let year = inDate.getFullYear(); //yyyy
   let month = 1 + inDate.getMonth(); //M
@@ -25,4 +27,26 @@ export function toStateStr(inState) {
     case 2:
       return "Confirmed";
   }
+}
+
+export function getBooked(callback) {
+  let result = {};
+
+  axios.get("https://api.invite.so/reservation/").then((res) => {
+    if (res.data.lenth === 0) return;
+
+    res.data.map((reserv) => {
+      const fromDate = new Date(reserv.fromDate);
+      const toDate = new Date(reserv.toDate);
+
+      for (let i = fromDate; i < toDate; i.setDate(i.getDate() + 1)) {
+        if (!result[i.getMonth()]) {
+          result[i.getMonth()] = [];
+        }
+
+        result[i.getMonth()].push(i.getDate());
+      }
+    });
+    callback(result);
+  });
 }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Typography, Box } from "@material-ui/core";
 import { LocalizationProvider, Calendar as MuiCal } from "@material-ui/pickers";
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns";
+import { getBooked } from "./Utils";
 
 function generateCalendar(month, reserved) {
   let baseDate = new Date();
@@ -73,39 +74,57 @@ function generateCalendar(month, reserved) {
   );
 }
 
-function generateMuiCal(month, reserved) {
+function generateMuiCal(month, booked) {
   let baseDate = new Date();
   baseDate.setMonth(month);
-  const nextmonth = new Date(baseDate.getFullYear(), baseDate.getMonth() + 3, 0);
+  const nextmonth = new Date(
+    baseDate.getFullYear(),
+    baseDate.getMonth() + 3,
+    0
+  );
 
   return (
     <Box>
-    <MuiCal
-      currentMonth={baseDate}
-      isDateDisabled={(e) => {
-        return reserved.includes(e.getDate());
-      }}
-      date={new Date(0)}
-      changeFocusedDay={(e) => {}}
-      onChange={(e) => {}}
-      maxDate={nextmonth}
-    />
+      <MuiCal
+        currentMonth={baseDate}
+        isDateDisabled={(e) => {
+          return booked && booked.includes(e.getDate());
+        }}
+        date={new Date(0)}
+        changeFocusedDay={(e) => {}}
+        onChange={(e) => {}}
+        maxDate={nextmonth}
+      />
     </Box>
   );
 }
 
 class Calendar extends Component {
+  constructor() {
+    super();
+
+    this.state = { booked: {} };
+  }
+
+  componentDidMount() {
+    getBooked((e) => {
+      this.setState({ booked: e });
+    });
+  }
+
   render() {
     let nextMonth = new Date();
     nextMonth.setDate(nextMonth.getDate() + 30);
 
     const today = new Date();
     console.log(today);
+
     return (
       <LocalizationProvider dateAdapter={DateFnsUtils}>
         <Box display="flex" flexWrap="wrap" m="auto" justifyContent="center">
-          {generateMuiCal(3, [24, 25])}
-          {generateMuiCal(4, [])}
+
+          {generateMuiCal(3, this.state.booked[3])}
+          {generateMuiCal(4, this.state.booked[4])}
         </Box>
         <Box display="flex" flexWrap="wrap" m="auto" justifyContent="center">
           {generateCalendar(3, [24, 25])}

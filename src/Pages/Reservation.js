@@ -17,7 +17,7 @@ import {
   LocalizationProvider,
   TimePicker,
 } from "@material-ui/pickers";
-import { toDateStr, toTimeStr, toReqStr } from "./Utils";
+import { toReqStr, getBooked } from "./Utils";
 
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns";
 import axios from "axios";
@@ -30,14 +30,14 @@ class Reservation extends Component {
       range: [],
       time: new Date(),
       sending: false,
-      reserved: (e) => {
-        return false;
-      },
+      booked: {},
     };
   }
 
   componentDidMount() {
-    
+    getBooked((e) => {
+      this.setState({ booked: e });
+    });
   }
 
   render() {
@@ -52,6 +52,8 @@ class Reservation extends Component {
     };
 
     const handleRequest = (e) => {
+      e.preventDefault();
+
       this.state.range[0].setHours(this.state.time.getHours());
       this.state.range[0].setMinutes(this.state.time.getMinutes());
       this.setState({ sending: true });
@@ -73,58 +75,84 @@ class Reservation extends Component {
         });
     };
 
+    const canNotReserve = (e) => {
+      const month = e.getMonth();
+      const date = e.getDate();
+      return (
+        this.state.booked[month] && this.state.booked[month].includes(date)
+      );
+    };
+
+    const canSubmit = () => {
+      const range = this.state.range[0] && this.state.range[1];
+
+      if (!range) {
+        return false;
+      }
+      for (let i = new Date(this.state.range[0]); i < this.state.range[1]; i.setDate(i.getDate() + 1)) {
+        console.log(i);
+        if ( canNotReserve(i) ) {
+          return false;
+        }
+      }
+
+      return true;
+    };
     return (
       <div>
         <Typography variant="h4">Reservation</Typography>
         <LocalizationProvider dateAdapter={DateFnsUtils}>
-          <Grid container direction="column" alignItems="center">
-            <Grid item>
-              <Hidden mdDown>
-                <StaticDateRangePicker
-                  displayStaticWrapperAs="desktop"
-                  disablePast="true"
-                  value={this.state.range}
-                  onChange={(date) => handleDateChange(date)}
-                  renderInput={(props) => <TextField {...props} />}
-                  shouldDisableDate={this.state.reserved}
-                />
-              </Hidden>
-              <Hidden mdUp>
-                <StaticDateRangePicker
-                  displayStaticWrapperAs="mobile"
-                  disablePast="true"
-                  value={this.state.range}
-                  onChange={(date) => handleDateChange(date)}
+          <form onSubmit={handleRequest}>
+            <Grid container direction="column" alignItems="center">
+              <Grid item>
+                <Hidden mdDown>
+                  <StaticDateRangePicker
+                    displayStaticWrapperAs="desktop"
+                    disablePast="true"
+                    value={this.state.range}
+                    onChange={(date) => handleDateChange(date)}
+                    renderInput={(props) => <TextField {...props} />}
+                    shouldDisableDate={canNotReserve}
+                  />
+                </Hidden>
+                <Hidden mdUp>
+                  <StaticDateRangePicker
+                    displayStaticWrapperAs="mobile"
+                    disablePast="true"
+                    value={this.state.range}
+                    onChange={(date) => handleDateChange(date)}
+                    autoOk="true"
+                    renderInput={(props) => <TextField {...props} />}
+                    shouldDisableDate={canNotReserve}
+                  />
+                </Hidden>
+              </Grid>
+              <Grid item>
+                <TimePicker
+                  ampm="false"
+                  value={this.state.time}
+                  onChange={handleTimeChange}
                   autoOk="true"
-                  renderInput={(props) => <TextField {...props} />}
-                  shouldDisableDate={this.state.reserved}
                 />
-              </Hidden>
+              </Grid>
+              <Grid item>
+                <Box p={2}>
+                  {!this.state.sending && (
+                    <Button
+                      endIcon={<Send />}
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={!canSubmit()}
+                    >
+                      Request
+                    </Button>
+                  )}
+                  {this.state.sending && <CircularProgress />}
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item>
-              <TimePicker
-                ampm="false"
-                value={this.state.time}
-                onChange={handleTimeChange}
-                autoOk="true"
-              />
-            </Grid>
-            <Grid item>
-              <Box p={2}>
-                {!this.state.sending && (
-                  <Button
-                    onClick={handleRequest}
-                    endIcon={<Send />}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Request
-                  </Button>
-                )}
-                {this.state.sending && <CircularProgress />}
-              </Box>
-            </Grid>
-          </Grid>
+          </form>
         </LocalizationProvider>
       </div>
     );
