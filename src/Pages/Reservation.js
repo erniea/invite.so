@@ -27,7 +27,7 @@ class Reservation extends Component {
   constructor({ props }) {
     super(props);
     this.state = {
-      range: [],
+      range: [new Date(), new Date()],
       time: new Date(),
       sending: false,
       booked: {},
@@ -100,7 +100,8 @@ class Reservation extends Component {
     };
     return (
       <div>
-        <Typography variant="h4">Reservation</Typography>
+        <Typography variant="h5">Reservation</Typography>
+        <Box p={2} />
         <LocalizationProvider dateAdapter={DateFnsUtils}>
           <form onSubmit={handleRequest}>
             <Grid container direction="column" alignItems="center">

@@ -29,7 +29,6 @@ class Home extends Component {
 
     const auth = cookies.get("sn") !== undefined;
     const profile = cookies.get("profile");
-    const token = cookies.get("token");
     console.log(profile);
     const rand = Math.floor(Math.random() * 5);
     const arr = ["Windy", "Rocky", "Tangerine", "Harbang", "Hallabong"];

@@ -26,6 +26,8 @@ export function toStateStr(inState) {
       return "Canceled";
     case 2:
       return "Confirmed";
+    default:
+      return "Undefined";
   }
 }
 

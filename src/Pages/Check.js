@@ -14,6 +14,7 @@ import {
   Paper,
   IconButton,
   Typography,
+  Box,
 } from "@material-ui/core";
 
 import axios from "axios";
@@ -58,7 +59,7 @@ class Check extends Component {
 
       let formdata = new FormData();
       formdata.append("token", cookies.get("token"));
-      
+
       axios
         .post(`https://api.invite.so/reservation/${sn}/cancel/`, formdata)
         .then((res) => {
@@ -71,8 +72,10 @@ class Check extends Component {
 
     return (
       <div>
-        <Typography>Reservation for {cookies.get("profile").name}</Typography>
-
+        <Typography variant="h5">
+          Reservation for {cookies.get("profile").name}
+        </Typography>
+        <Box p={2} />
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -108,13 +111,16 @@ class Check extends Component {
                     <TableCell align="right">
                       {toTimeStr(new Date(row.fromDate))}
                     </TableCell>
-                    <TableCell align="right">{toDateStr(new Date(row.toDate))}</TableCell>
+                    <TableCell align="right">
+                      {toDateStr(new Date(row.toDate))}
+                    </TableCell>
                     <TableCell align="right">{toStateStr(row.state)}</TableCell>
                     <TableCell align="right">
-                      { row.state === 0 &&
-                      <IconButton onClick={handleDelete} sn={row.sn}>
-                        <DeleteForever />
-                      </IconButton>}
+                      {row.state === 0 && (
+                        <IconButton onClick={handleDelete} sn={row.sn}>
+                          <DeleteForever />
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

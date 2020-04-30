@@ -42,7 +42,6 @@ function generateCalendar(month, reserved) {
 
     for (let j = 0; j < 7; ++j) {
       const dayNum = i * 7 + j - startingDay + 1;
-      const dayText = dayNum >= 10 ? dayNum : "0" + dayNum;
       const realDay = dayNum > 0 && dayNum <= lastDate.getDate();
       if (realDay) {
         week.push(

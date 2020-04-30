@@ -5,19 +5,12 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { withCookies } from "react-cookie";
 
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Box,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
 import {
   Event,
   EventAvailable,
   FlightTakeoff,
   FlightLand,
-  DateRange,
 } from "@material-ui/icons";
 
 const useStyles = (theme) => ({
@@ -80,7 +73,7 @@ class InviteAppBar extends Component {
             )}
             {auth && (
               <div>
-{/*                <IconButton color="inherit" component={RouterLink} to="/calendar">
+                {/*                <IconButton color="inherit" component={RouterLink} to="/calendar">
                   <DateRange /> 
             </IconButton> */}
                 <IconButton

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Button, CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import { withCookies } from "react-cookie";
