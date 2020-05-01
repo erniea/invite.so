@@ -7,7 +7,7 @@ export default function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://invite.so/">
+      <Link color="inherit" href="https://bargn.bada.works/">
         BargnBada
       </Link>{" "}
       {new Date().getFullYear()}

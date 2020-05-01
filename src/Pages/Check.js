@@ -18,7 +18,7 @@ import {
 } from "@material-ui/core";
 
 import axios from "axios";
-import { DeleteForever } from "@material-ui/icons";
+import { DeleteForever, Check as CheckIcon } from "@material-ui/icons";
 import { toDateStr, toTimeStr, toStateStr } from "./Utils";
 
 const useStyles = (theme) => ({
@@ -41,12 +41,9 @@ class Check extends Component {
     axios
       .post("https://api.invite.so/reservation/my/", formdata)
       .then((res) => {
-        console.log(res);
         this.setState({ reservation: res.data });
       })
-      .catch((res) => {
-        console.log(res);
-      });
+      .catch((res) => {});
   }
 
   render() {
@@ -63,8 +60,18 @@ class Check extends Component {
         .then((res) => {
           this.setState({ reservation: res.data });
         })
-        .catch((res) => {
-          console.log(res);
+        .catch((res) => {});
+    };
+
+    const handleConfirm = (e) => {
+      const sn = e.currentTarget.getAttribute("sn");
+      let formdata = new FormData();
+      formdata.append("token", cookies.get("token"));
+
+      axios
+        .post(`https://api.invite.so/reservation/${sn}/confirm/`, formdata)
+        .then((res) => {
+          this.setState({ reservation: res.data });
         });
     };
 
@@ -117,6 +124,11 @@ class Check extends Component {
                       {row.state === 0 && (
                         <IconButton onClick={handleDelete} sn={row.sn}>
                           <DeleteForever />
+                        </IconButton>
+                      )}
+                      {row.memberSn !== parseInt(cookies.get("sn")) && (
+                        <IconButton onClick={handleConfirm} sn={row.sn}>
+                          <CheckIcon />
                         </IconButton>
                       )}
                     </TableCell>

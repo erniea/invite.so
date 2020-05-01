@@ -8,7 +8,7 @@ import { Box, Container } from "@material-ui/core";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import { Home, Login, Check, Reservation, Calendar } from "./Pages";
+import { Home, Login, Check, Reservation } from "./Pages";
 import InviteAppBar from "./Components/AppBar";
 import Copyright from "./Components/Copyright";
 
@@ -34,7 +34,6 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/check" component={Check} />
         <Route path="/reservation" component={Reservation} />
-        <Route path="/calendar" component={Calendar} />
       </Container>
       <Box m={4} />
       <Copyright />
